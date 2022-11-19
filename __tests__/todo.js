@@ -1,62 +1,64 @@
 // __tests__/todo.js
-let t = require("../todo");
+let todoList = require("../todo");
 
-const { all, markAsComplete, add, overdue, dueToday, dueLater } = t();
+const { all, markAsComplete, add, overdue, dueToday, dueLater } = todoList();
 /* eslint-disable no-undef */
-describe("Todo List Test Suite", () => {
+describe("Todo list ka testing", () => {
   beforeAll(() => {
     // Seed the test data
     const today = new Date();
     const oneDay = 60 * 60 * 24 * 1000;
     [
       {
-        title: "Buy milk",
-        completed: false,
-        dD: new Date(today.getTime() - 2 * oneDay).toLocaleDateString(
+        title: "Meditation",
+        completed: true,
+        dueDate: new Date(today.getTime() - 2 * oneDay).toLocaleDateString(
           "en-CA"
         ),
       },
       {
-        title: "Pay rent",
+        title: "Going to Gym",
         completed: false,
-        dD: new Date().toLocaleDateString("en-CA"),
+        dueDate: new Date().toLocaleDateString("en-CA"),
       },
       {
-        title: "Submit assignment",
+        title: "Breakfast",
         completed: false,
-        dD: new Date(today.getTime() + 2 * oneDay).toLocaleDateString(
+        dueDate: new Date(today.getTime() + 2 * oneDay).toLocaleDateString(
           "en-CA"
         ),
       },
     ].forEach(add);
   });
-  test("Should add a new todo", () => {
+  test("Creating a new task on todo list", () => {
     expect(all.length).toEqual(3);
 
     add({
-      title: "A test item",
+      title: "A new item",
       completed: false,
-      dD: new Date().toLocaleDateString("en-CA"),
+      dueDate: new Date().toLocaleDateString("en-CA"),
     });
 
     expect(all.length).toEqual(4);
   });
 
-  test("Should mark a todo as complete", () => {
-    expect(all[0].completed).toEqual(false);
-    markAsComplete(0);
-    expect(all[0].completed).toEqual(true);
+  test("Completed Tasks", () => {
+    expect(all[1].completed).toEqual(false);
+    markAsComplete(1);
+    expect(all[1].completed).toEqual(true);
   });
 
-  test("Should retrieve overdue items", () => {
+  test("Tasks with time left", () => {
+    expect(dueLater().length).toEqual(1);
+  });
+
+  test(" overdue tasks", () => {
     expect(overdue().length).toEqual(1);
   });
 
-  test("Should retrieve due today items", () => {
+  test("Pending Tasks", () => {
     expect(dueToday().length).toEqual(2);
   });
 
-  test("Should retrieve due later items", () => {
-    expect(dueLater().length).toEqual(1);
-  });
+ 
 });
